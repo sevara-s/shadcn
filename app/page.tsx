@@ -1,11 +1,19 @@
-import Image from "next/image";
-import Icon from "@/public/svgs/icon";
-import BrComponent from "./breadcrumb/page";
-
+import Showcase from "@/components/showcase";
+import Integrations from "@/components/integrations";
+import Examples from "@/components/examples";
+import Start from "@/components/start";
+import { Faq } from "@/components/faq";
 export default function Home() {
   return (
     <>
-     <BrComponent/>
+     {/* <BrComponent/> */}
+     <Showcase/>
+     <Integrations/>
+     <Examples/>
+     <Start/>
+     <Faq/>
+    
+     
     </>
   );
 }

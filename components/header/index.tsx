@@ -1,90 +1,115 @@
 "use client"
 import React from "react";
-import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Github, Twitter, FileText, Box, Palette, Copy, Blocks, Sun, Moon } from "lucide-react";
+import { Button } from "../ui/button";
+import { useTheme } from "next-themes";
 
-interface HeaderLink {
-  name: string;
-  href?: string;
-}
+const ThemeToggle = () => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
-const Header = () => {
-  const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  
-  const links: HeaderLink[] = [
-    { name: "Docs" },
-    { name: "Components" },
-    { name: "Blocks" },
-    { name: "Charts" },
-    { name: "Themes" },
-    { name: "Colors" },
-  ];
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!isMobileMenuOpen);
-  };
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" aria-label="Toggle theme">
+        <Sun className="h-5 w-5" />
+      </Button>
+    );
+  }
 
   return (
-    <header className={`
-      fixed top-0 left-0 right-0 z-50
-      bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
-      border-b border-border
-      h-16
-    `}>
-      <div className="container mx-auto px-4 h-full">
-        <div className="flex items-center justify-between h-full">
-          {/* Logo and Desktop Nav */}
-          <div className="flex items-center gap-6 h-full">
-            <div className="flex items-center">
-              <Image 
-                src="/imgs/Link.png" 
-                alt="Logo" 
-                width={32}
-                height={32}
-                className="rounded-md"
-              />
-            </div>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      aria-label="Toggle theme"
+    >
+      {theme === "light" ? (
+        <Moon className="h-5 w-5" />
+      ) : (
+        <Sun className="h-5 w-5" />
+      )}
+    </Button>
+  );
+};
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-6 h-full">
-              {links.map((link, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors h-full flex items-center border-b-2 border-transparent hover:border-primary"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </nav>
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  const navItems = [
+    { label: "Docs", icon: <FileText className="h-4 w-4" /> },
+    { label: "Components", icon: <Box className="h-4 w-4" /> },
+    { label: "Themes", icon: <Palette className="h-4 w-4" /> },
+    { label: "Examples", icon: <Copy className="h-4 w-4" /> },
+    { label: "Blocks", icon: <Blocks className="h-4 w-4" /> },
+    { label: "GitHub", icon: <Github className="h-4 w-4" /> },
+  ];
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between px-4">
+        {/* Logo and Desktop Nav */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <Box className="h-6 w-6" />
+            <span className="text-lg font-semibold">Shadcn UI Pro</span>
           </div>
 
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Button
+                key={item.label}
+                variant="ghost"
+                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+              >
+                <span className="hidden lg:inline">{item.label}</span>
+                <span className="lg:hidden">{item.icon}</span>
+              </Button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Right Side Actions */}
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="hidden sm:inline-flex">
+            <Github className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" className="hidden sm:inline-flex">
+            <Twitter className="h-5 w-5" />
+          </Button>
+          <ThemeToggle />
+          
           {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2 rounded-md text-foreground/70 hover:bg-accent hover:text-foreground transition-colors"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
       </div>
 
-      {/* Mobile Menu - Outside container so it can overlay content */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-16 left-0 right-0 bg-background shadow-lg border-b border-border animate-in fade-in slide-in-from-top-4">
-          <nav className="flex flex-col px-4 py-2">
-            {links.map((link, index) => (
-              <a
-                key={index}
-                href="#"
-                className="px-3 py-3 text-sm font-medium text-foreground/70 hover:bg-accent hover:text-foreground rounded-md transition-colors border-b border-border/10 last:border-b-0"
-                onClick={() => setMobileMenuOpen(false)}
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden">
+          <div className="space-y-1 px-2 pb-3 pt-2">
+            {navItems.map((item) => (
+              <Button
+                key={item.label}
+                variant="ghost"
+                className="w-full justify-start gap-2"
               >
-                {link.name}
-              </a>
+                {item.icon}
+                {item.label}
+              </Button>
             ))}
-          </nav>
+          </div>
         </div>
       )}
     </header>

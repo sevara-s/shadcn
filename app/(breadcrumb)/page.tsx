@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import Link from "next/link";
 import {
@@ -13,21 +13,24 @@ import { Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const BrComponent = () => {
-  
-  const [activeTab, setActiveTab] = React.useState<"preview" | "code">("preview");
-  const [activePackageManager, setActivePackageManager] = React.useState<"npm" | "pnpm" | "yarn">("npm");
+  const [activeTab, setActiveTab] = React.useState<"preview" | "code">(
+    "preview"
+  );
+  const [activePackageManager, setActivePackageManager] = React.useState<
+    "npm" | "pnpm" | "yarn"
+  >("npm");
   const [copied, setCopied] = React.useState(false);
 
   const installationCommands = {
     npm: "npx shadcn-ui@latest add breadcrumb",
     pnpm: "pnpm dlx shadcn-ui@latest add breadcrumb",
-    yarn: "yarn shadcn-ui@latest add breadcrumb"
+    yarn: "yarn shadcn-ui@latest add breadcrumb",
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(installationCommands[activePackageManager]);
     setCopied(true);
- 
+
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -98,7 +101,9 @@ const BrComponent = () => {
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+                    <BreadcrumbLink href="/components">
+                      Components
+                    </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
@@ -146,7 +151,6 @@ const BrComponent = () => {
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>`);
-                 ;
                 }}
               >
                 <Copy className="h-4 w-4" />
@@ -159,7 +163,7 @@ const BrComponent = () => {
       {/* Installation Section */}
       <div className="mt-12">
         <h2 className="text-xl font-bold mb-4">Installation</h2>
-        
+
         {/* Package Manager Tabs */}
         <div className="flex border-b mb-4">
           <button
@@ -205,7 +209,11 @@ const BrComponent = () => {
             className="absolute top-2 right-2 h-8 w-8"
             onClick={handleCopy}
           >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied ? (
+              <Check className="h-4 w-4" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>
